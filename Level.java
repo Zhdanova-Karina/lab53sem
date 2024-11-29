@@ -21,7 +21,7 @@ public class Level {
 
         // Инициализация места
         if (isBedroom) {
-            name = "Спальня";
+            name = "Спальня\n";
             countDalmatins = 3;
             places[0][0] = new Place("1. Шкаф", false);
             places[0][1] = new Place("2. Тумба", false);
@@ -29,7 +29,7 @@ public class Level {
             places[0][3] = new Place("4. Коробка", true);
             places[0][4] = new Place("5. Полка", true);
         } else {
-            name = "Подвал";
+            name = "Подвал\n";
             countDalmatins = 1;
             places[1][0] = new Place("1. Бочка", false);
             places[1][1] = new Place("2. Клетка", true);
@@ -63,13 +63,13 @@ public class Level {
             }
         }
 
-        // Запрашиваем ввод от пользователя
-        System.out.print("\nВведите пункт: ");
-        Scanner scanner = new Scanner(System.in);
         int numberPlace;
+        Scanner scanner = new Scanner(System.in);
         // Проверка ввода
         while (true) {
             try {
+                // Запрашиваем ввод от пользователя
+                System.out.print("\nВведите пункт: ");
                 numberPlace = scanner.nextInt();
 
                 // Проверяем на корректность диапазона
@@ -106,68 +106,3 @@ public class Level {
             System.out.println("Увы, здесь никого нет\n");
         }
     }
-
-    public int TransferLastLocation(Game player) {
-        char symbol;
-
-        // Проверяем, соответствует ли количество найденных далматинцев условиям
-        if (player.getCountDalmatins() == countDalmatins && player.getCountDalmatins() < MAX_DALMATIANS) {
-            System.out.println("\n\nНажмите *, чтобы перейти к следующей локации");
-
-            // Используем Scanner для получения ввода
-            Scanner scanner = new Scanner(System.in);
-
-            try {
-                symbol = scanner.next().charAt(0); // Читаем первый символ ввода
-
-                // Проверяем, является ли символ равным '*'
-                if (symbol == '*') {
-                    return 0; // Переход к следующей локации
-                } else {
-                    throw new IllegalArgumentException("Некорректный ввод. Пожалуйста, нажмите '*' для перехода.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Ошибка: введите корректный символ.");
-                scanner.nextLine(); // Очищаем некорректный ввод
-            } catch (IllegalArgumentException e) {
-                System.out.println("Ошибка: " + e.getMessage());
-            } catch (Exception e) {
-                System.out.println("Неизвестная ошибка: " + e.getMessage());
-            }
-        }
-
-        return 1; // Если не выполнены условия перехода, возвращаем 1
-    }
-
-    public int RangeCheck(int number, int range) {
-        return (number > 0 && number <= range) ? 0 : 1;
-    }
-
-    public void Level_1(Game game) {
-        while (game.getCountDalmatins() < countDalmatins) {
-            int number = PrintLocationPlace(0, MAX_PLACE);
-            if (RangeCheck(number, MAX_PLACE) == 0) {
-                DalmatinFound(game, number, 0);
-            } else {
-                game.PrintRepeatInput();
-            }
-        }
-    }
-
-    public void Level_2(Game game) {
-        Cage cage = new Cage("17F");
-        while (game.getCountDalmatins() < MAX_DALMATIANS) {
-            int number = PrintLocationPlace(1, MAX_PLACE);
-            if (RangeCheck(number, MAX_PLACE) == 0) {
-                if (number != 2) {
-                    DalmatinFound(game, number, 1);
-                } else {
-                    System.out.println("\nО нет! Клетка закрыта на замок! Вам нужно отгадать код!\n");
-                    cage.CodeOfCage(this, game, number);
-                }
-            } else {
-                game.PrintRepeatInput();
-            }
-        }
-    }
-}
