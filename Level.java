@@ -67,19 +67,25 @@ public class Level {
         System.out.print("\nВведите пункт: ");
         Scanner scanner = new Scanner(System.in);
         int numberPlace;
-
         // Проверка ввода
         while (true) {
             try {
                 numberPlace = scanner.nextInt();
 
-                // Очищаем буфер ввода
-                scanner.nextLine();
+                // Проверяем на корректность диапазона
+                if (numberPlace < 1 || numberPlace > countPlace) {
+                    throw new IllegalArgumentException("Ошибка: число должно быть в пределах от 1 до " + countPlace + ".");
+                }
 
+                scanner.nextLine(); // Очищаем буфер ввода
                 return numberPlace; // Возвращаем корректный номер места
             } catch (InputMismatchException e) {
                 System.out.println("Ошибка: введите корректное целое число.");
                 scanner.nextLine(); // Очищаем некорректный ввод
+            } catch (IllegalArgumentException e) {
+                System.out.println("Ошибка: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Неизвестная ошибка: " + e.getMessage());
             }
         }
     }
