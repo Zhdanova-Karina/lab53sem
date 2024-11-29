@@ -103,16 +103,34 @@ public class Level {
 
     public int TransferLastLocation(Game player) {
         char symbol;
+
+        // Проверяем, соответствует ли количество найденных далматинцев условиям
         if (player.getCountDalmatins() == countDalmatins && player.getCountDalmatins() < MAX_DALMATIANS) {
             System.out.println("\n\nНажмите *, чтобы перейти к следующей локации");
 
             // Используем Scanner для получения ввода
             Scanner scanner = new Scanner(System.in);
-            symbol = scanner.next().charAt(0); // Читаем первый символ ввода
 
-            if (symbol == '*') return 0;
+            try {
+                symbol = scanner.next().charAt(0); // Читаем первый символ ввода
+
+                // Проверяем, является ли символ равным '*'
+                if (symbol == '*') {
+                    return 0; // Переход к следующей локации
+                } else {
+                    throw new IllegalArgumentException("Некорректный ввод. Пожалуйста, нажмите '*' для перехода.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Ошибка: введите корректный символ.");
+                scanner.nextLine(); // Очищаем некорректный ввод
+            } catch (IllegalArgumentException e) {
+                System.out.println("Ошибка: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Неизвестная ошибка: " + e.getMessage());
+            }
         }
-        return 1; // Если символ не '*', возвращаем 1
+
+        return 1; // Если не выполнены условия перехода, возвращаем 1
     }
 
     public int RangeCheck(int number, int range) {
